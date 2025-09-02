@@ -212,10 +212,22 @@ fn main() {
         let library_root = lib_destination.join("build/libs");
         println!("cargo:rustc-link-search={}", library_root.to_string_lossy());
 
+        // the target operating system (NOT the same as cfg(target_os)
+        // since in a build.rs, this will always be the host system.
+        let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+
         if !matches!(PD_MULTI, "true") {
-            println!("cargo:rustc-link-lib=static=pd");
+            if target_os == "windows" {
+                println!("cargo:rustc-link-lib=static=libpd-static");
+            } else {
+                println!("cargo:rustc-link-lib=static=pd");
+            }
         } else {
-            println!("cargo:rustc-link-lib=static=pd-multi");
+            if target_os == "windows" {
+                println!("cargo:rustc-link-lib=static=libpd-multi-static");
+            } else {
+                println!("cargo:rustc-link-lib=static=pd-multi");
+            }            
         }
     }
 

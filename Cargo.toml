@@ -21,4 +21,4 @@ exclude = [
 
 [build-dependencies]
 cmake = "0.1.50"
-bindgen = "0.69.1"
+bindgen = "0.72.1"
